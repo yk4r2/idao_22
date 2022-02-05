@@ -2,9 +2,9 @@
 Current python version: 3.9.6
 
 ## 🔗 Useful links
-— [Contest](https://official.contest.yandex.ru/contest/34916/problems/).
-— [Leaderboard](https://official.contest.yandex.ru/contest/34916/standings/).
-— Credentials are in Telegram.
+- [Contest](https://official.contest.yandex.ru/contest/34916/problems/)
+- [Leaderboard](https://official.contest.yandex.ru/contest/34916/standings/)
+- Credentials are in Telegram
 
 ## 🛠 Installation
 - `pyenv` from [here](https://github.com/pyenv/pyenv)
