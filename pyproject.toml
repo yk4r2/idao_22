@@ -15,6 +15,9 @@ plotly = "^5.2.1"
 matplotlib = "^3.4.3"
 tqdm = "^4.62.0"
 scikit-learn = "^1.0.2"
+pymatgen = "^2022.2.1"
+ase = "^3.22.1"
+nglview = "^3.0.3"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.15.3"
