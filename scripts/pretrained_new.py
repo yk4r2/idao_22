@@ -338,6 +338,7 @@ def get_multiple_predictions(
     df2 = pd.DataFrame(results)
     df2["jid"] = df2["id"]
     df3 = pd.merge(df1, df2, on="jid")
+    df3.to_csv(filename)
     save = []
     for i, ii in df3.iterrows():
         info = {}
