@@ -18,6 +18,7 @@ scikit-learn = "^1.0.2"
 pymatgen = "^2022.2.1"
 ase = "^3.22.1"
 nglview = "^3.0.3"
+jarvis-tools = "^2022.1.10"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.15.3"
