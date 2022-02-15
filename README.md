@@ -5,6 +5,7 @@ Current python version: 3.9.6
 - [Contest](https://official.contest.yandex.ru/contest/34916/problems/)
 - [Leaderboard](https://official.contest.yandex.ru/contest/34916/standings/)
 - [Colab notebook](https://colab.research.google.com/drive/1NZhOvrt8FKLhnZgiQzNDuF2NApU2E0al?usp=sharing) with [ALIGNN](https://github.com/usnistgov/alignn) fine-tuning
+- [Colab notebook](https://colab.research.google.com/drive/1dSpGZz-TYmOxv9xH2A65kMdPb1XtMEQp?usp=sharing) with inference.
 - Credentials are in Telegram
 
 ## 🛠 Installation
