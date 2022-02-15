@@ -1,5 +1,6 @@
 # 📈 [International Data Analysis Olympiad](https://idao.world/)
 Current python version: 3.9.6
+⚠️Please add all your tasks to [Google Sheets](https://docs.google.com/spreadsheets/d/1RAPW0PNO2wJscj2wjK-vw9kd-JrSj9u3ZZPUzFGEaw4/edit?usp=sharing) and separate branches.
 
 ## 🔗 Useful links
 - [Contest](https://official.contest.yandex.ru/contest/34916/problems/)
@@ -27,4 +28,3 @@ Current python version: 3.9.6
 ## 🗒 Notes
 I added [wemake-python-styleguide](https://wemake-python-stylegui.de/) flake8 plugin and some autoreformatters to dev dependencies. Please use `black` at least.
 
-⚠️Please add all your tasks to [Google Sheets](https://docs.google.com/spreadsheets/d/1RAPW0PNO2wJscj2wjK-vw9kd-JrSj9u3ZZPUzFGEaw4/edit?usp=sharing) and separate branches.
