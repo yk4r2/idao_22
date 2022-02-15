@@ -1,5 +1,5 @@
 # 📈 [International Data Analysis Olympiad](https://idao.world/)
-Current python version: 3.9.6
+Current python version: 3.9.6\
 ⚠️Please add all your tasks to [Google Sheets](https://docs.google.com/spreadsheets/d/1RAPW0PNO2wJscj2wjK-vw9kd-JrSj9u3ZZPUzFGEaw4/edit?usp=sharing) and separate branches.
 
 ## 🔗 Useful links
