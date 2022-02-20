@@ -3,9 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 adhoc/eda_export/
+.DS_Store
+settings.json
 
 # C extensions
 *.so
+
+# danya
+models/mt-cgcnn/cifs/
+
+
 
 # Distribution / packaging
 .Python
