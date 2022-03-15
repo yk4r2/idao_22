@@ -187,9 +187,7 @@ def get_figshare_model(model_name="jv_formation_energy_peratom_alignn"):
         response = requests.get(url, stream=True)
         total_size_in_bytes = int(response.headers.get("content-length", 0))
         block_size = 1024  # 1 Kibibyte
-        progress_bar = tqdm(
-            total=total_size_in_bytes, unit="iB", unit_scale=True
-        )
+        progress_bar = tqdm(total=total_size_in_bytes, unit="iB", unit_scale=True)
         with open(path, "wb") as file:
             for data in response.iter_content(block_size):
                 progress_bar.update(len(data))
@@ -206,9 +204,7 @@ def get_figshare_model(model_name="jv_formation_energy_peratom_alignn"):
     print("Path", os.path.abspath(path))
     # print("Loading the zipfile...", zipfile.ZipFile(path).namelist())
     data = zipfile.ZipFile(path).read(tmp)
-    model = ALIGNN(
-        ALIGNNConfig(name="alignn", output_features=output_features)
-    )
+    model = ALIGNN(ALIGNNConfig(name="alignn", output_features=output_features))
     new_file, filename = tempfile.mkstemp()
     with open(filename, "wb") as f:
         f.write(data)
@@ -230,12 +226,7 @@ def get_prediction(
     # print("Loading completed.")
     g, lg = Graph.atom_dgl_multigraph(atoms, cutoff=float(cutoff))
     out_data = (
-        model([g.to(device), lg.to(device)])
-        .detach()
-        .cpu()
-        .numpy()
-        .flatten()
-        .tolist()
+        model([g.to(device), lg.to(device)]).detach().cpu().numpy().flatten().tolist()
     )
     return out_data
 
@@ -269,7 +260,9 @@ def get_multiple_predictions(
     # get_multiple_predictions(atoms_array=atoms_array)
 
     mem = []
-    zipper = zip(idx_array, atoms_array) if idx_array else enumerate(idx_array, atoms_array)
+    zipper = (
+        zip(idx_array, atoms_array) if idx_array else enumerate(idx_array, atoms_array)
+    )
     for i, ii in zipper:
         info = {}
         info["atoms"] = ii.to_dict()
@@ -338,13 +331,13 @@ def get_multiple_predictions(
     df2 = pd.DataFrame(results)
     df2["jid"] = df2["id"]
     df3 = pd.merge(df1, df2, on="jid")
-    df3.to_csv(filename.split('.')[0] + '.csv')
+    df3.to_csv(filename.split(".")[0] + ".csv")
 
     save = []
     for i, ii in df3.iterrows():
         info = {}
         info["id"] = ii["id"]
-#        info["atoms"] = ii["atoms"]
+        #        info["atoms"] = ii["atoms"]
         info["pred"] = ii["pred"]
         save.append(info)
 
@@ -374,9 +367,9 @@ if __name__ == "__main__":
 
     # print("Predicted value:", model_name, file_path, out_data)
     import glob
+
     atoms_array = []
     for i in glob.glob("alignn/examples/sample_data/*.vasp"):
-       atoms = Atoms.from_poscar(i)
-       atoms_array.append(atoms)
+        atoms = Atoms.from_poscar(i)
+        atoms_array.append(atoms)
     get_multiple_predictions(atoms_array=atoms_array, model_name=model_name)
-
