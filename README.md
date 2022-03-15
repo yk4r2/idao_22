@@ -65,7 +65,11 @@ A sample submission can be found on [GitHub](https://github.com/HSE-LAMBDA/IDAO-
 
 ##### Quality Metric
 
-Energy within Threshold (EwT) is designed to measure the practical usefulness of a model for replacing [DFT](https://en.wikipedia.org/wiki/Density_functional_theory) by evaluating whether the predicted energy is close to the ground truth (DFT energy). EwT is defined as the fraction of structures in which the predicted energy is within `0.02 eV` ([electronvolt](https://en.wikipedia.org/wiki/Electronvolt)) of the ground truth energy.
+Energy within Threshold (EwT) is designed to measure the practical usefulness of a model for replacing [DFT](https://en.wikipedia.org/wiki/Density_functional_theory) by evaluating whether the predicted energy is close to the ground truth (DFT energy). EwT is defined as the fraction of structures in which the predicted energy is within `ε = 0.02 eV` ([electronvolt](https://en.wikipedia.org/wiki/Electronvolt)) of the ground truth energy.
+
+<img src="https://render.githubusercontent.com/render/math?math=\text{EwT} = \frac{1}{N}\sum_i \left| E_{\text{predicted},i} - E_{\text{DFT},i} \right| < \epsilon">
+
+where <img src="https://render.githubusercontent.com/render/math?math=N"> is the number of samples in the dataset indexed by <img src="https://render.githubusercontent.com/render/math?math=i">.
 
 ##### Baseline
 
