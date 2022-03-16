@@ -20,12 +20,31 @@ ase = "^3.22.1"
 nglview = "^3.0.3"
 jarvis-tools = "^2022.1.10"
 networkx = "^2.7.1"
-
-[tool.poetry.dev-dependencies]
-wemake-python-styleguide = "^0.15.3"
-black = "^21.7b0"
-isort = "^5.9.3"
+black = "^22.1.0"
+flake8 = "^4.0.1"
+mypy = "^0.941"
+isort = "^5.10.1"
+pre-commit = "^2.17.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
