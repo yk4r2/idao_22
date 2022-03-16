@@ -23,7 +23,7 @@ Current python version: 3.9.6\
 	- ```pyenv install 3.9.6 && pyenv local 3.9.6```
 	- `poetry` instruction can be found [here](https://blog.jayway.com/2019/12/28/pyenv-poetry-saviours-in-the-python-chaos/)
 	- ```poetry update```
-- initialize the pre-commit hook with ```pre-commit install```
+- initialize the pre-commit hook with ```poetry run pre-commit install```
 - you can find the `get_data.sh` script in the `data/` folder: ```cd data/ && /bin/bash get_data.sh```
 
 
