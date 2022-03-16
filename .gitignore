@@ -1,3 +1,6 @@
 *.DS_Store*
 *__pycache__*
 *.ipynb_checkpoint*
+env/
+track_2_submission.zip
+submission.csv

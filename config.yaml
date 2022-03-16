@@ -2,8 +2,7 @@ data:
   private:
     root: data/dichalcogenides_private
     defects: data/dichalcogenides_private/defects
-  public:
-    root: data/dichalcogenides_public
-    defects: data/dichalcogenides_public/defects/structure
+    features: data/features.csv
 model:
-  weights: 'weights/val_mae_00750_0.010320.hdf5'
+  megnet: "weights/val_mae_00750_0.010320.hdf5"
+  boosting: "weights/boosting.cbm"
