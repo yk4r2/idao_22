@@ -23,6 +23,7 @@ Current python version: 3.9.6\
 	- ```pyenv install 3.9.6 && pyenv local 3.9.6```
 	- `poetry` instruction can be found [here](https://blog.jayway.com/2019/12/28/pyenv-poetry-saviours-in-the-python-chaos/)
 	- ```poetry update```
+- initialize the pre-commit hook with ```pre-commit install```
 - you can find the `get_data.sh` script in the `data/` folder: ```cd data/ && /bin/bash get_data.sh```
 
 
@@ -86,4 +87,3 @@ You may use additional information, data, and advice at your own risk. All solut
 - [Chen, C., Ye, W., Zuo, Y., Zheng, C. and Ong, S.P., 2019. Graph networks as a universal machine learning framework for molecules and crystals. Chemistry of Materials, 31(9), pp.3564-3572.](https://arxiv.org/pdf/1812.05055.pdf)
 - [Hu, Z., Wu, Z., Han, C., He, J., Ni, Z. and Chen, W., 2018. Two-dimensional transition metal dichalcogenides: interface and defect engineering. Chemical Society Reviews, 47(9), pp.3100-3128.](https://ir.nsfc.gov.cn//paperDownload/ZD5437990.pdf)
 - [Manzeli, S., Ovchinnikov, D., Pasquier, D., Yazyev, O.V. and Kis, A., 2017. 2D transition metal dichalcogenides. Nature Reviews Materials, 2(8), pp.1-15.](https://www.nature.com/articles/natrevmats201733)
-
