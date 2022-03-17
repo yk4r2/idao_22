@@ -78,6 +78,21 @@ You can use data in Kaggle datasets-format:
 - [Track 1 dataset](https://www.kaggle.com/datasets/yk4r22/idao-22)
 - [Track 2 dataset](https://www.kaggle.com/datasets/yk4r22/boosting-idao22)
 
+**Structure samples:**
+- The universal (ideal) band gap structure:
+![Universal (ideal) band gap structure](https://github.com/yk4r2/idao_22/blob/master/adhoc/images/ideal.png)
+
+- A high band gap structure:
+![High band gap structure](https://github.com/yk4r2/idao_22/blob/master/adhoc/images/high_gap.png)
+- A complement to high band gap structure:
+![High band gap structure complement](https://github.com/yk4r2/idao_22/blob/master/adhoc/images/high_hap_def.png)
+
+- A low band gap structure:
+![Low band gap structure](https://github.com/yk4r2/idao_22/blob/master/adhoc/images/low_gap_example.png)
+- A complement to low band gap structure:
+![Low band gap structure complement](https://github.com/yk4r2/idao_22/blob/master/adhoc/images/low_gap_example_def.png)
+
+
 Data structure:
 ```bash
 data
@@ -157,8 +172,9 @@ data
 ### 🪜 Steps
 ![Method scheme](images/IDAO-22-main.png)
 The original [ALIGNN](https://github.com/usnistgov/alignn) and [MEGNet](https://github.com/materialsvirtuallab/megnet) frameworks were fine-tuned and used in a following way:
+- First of all, EDA was conducted: [EDA source code](https://github.com/yk4r2/idao_22/blob/master/adhoc/atoms_to_defects.ipynb).
 - We described the data using CFID descriptor froM the [JARVIS-ML package](https://github.com/usnistgov/jarvis), source code is [here](https://t.ly/yCyi).
-- Secondly we used complements to our structures for predictions (Schottky defects). We computed complement structures (code in `adhoc/scripts/atoms_to_defects.py`) for future steps.
+- Secondly we used complements to our structures for predictions (Schottky defects). We computed complement structures (code in `adhoc/scripts/atoms_to_defects.py`) for future steps. Structure examples are [here](https://github.com/yk4r2/idao_22/blob/master/adhoc/images/).
 - Next, some graph features from [networkx.algorithms](https://networkx.org/documentation/stable/reference/algorithms/index.html) package were computed. See the `adhoc/scripts/graph_features.py` and functions documentation for more info.
 
 **All these steps are performed in `adhoc/datasets_converter.ipynb`**
