@@ -1,8 +1,13 @@
 data:
   private:
-    root: data/dichalcogenides_private
-    defects: data/dichalcogenides_private/defects
-    features: data/features.csv
+    root: data/eval/
+    defects: data/eval/defects/
+    no_defects: data/eval/no_defects/
+    features: data/catboost_features.csv
+  public:
+    root: data/train/
+    defects: data/train/defects/
+    no_defects: data/train/no_defects/
 model:
   megnet: "weights/val_mae_00750_0.010320.hdf5"
   boosting: "weights/boosting.cbm"

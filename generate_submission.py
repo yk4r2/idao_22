@@ -18,7 +18,7 @@ def main():
     config: D[str, str] = read_config("config.yaml")
     # reading pymatgen structures from path
     private: D[str, Structure] = read_structures(
-        config["data"]["private"]["defects"])
+        config["data"]["private"]["defects"] + "pymatgen")
 
     # initializing model
     model: MEGNetModel = prepare_model(config["model"]["megnet"])

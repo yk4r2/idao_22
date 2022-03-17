@@ -21,40 +21,27 @@ def write_csv(data: L[D[str, str]], path: Path, fieldnames: L[str]) -> None:
         writer.writerows(data)
 
 
-def read_structures(
-    root: Path, with_targets=False
-) -> U[D[str, Structure], T[D[str, Structure], L[D[str, str]]]]:
+def read_structures(json_path: Path) -> D[str, Structure]:
     """
     takes path to the root of data and reads structures from .json file
     to dict, where keys are ids and values are pymatgen.core.Structure objects
 
     Args:
-        root (Path): path to data (for example data/dichalcogenides_private)
-        with_targets (bool, optional): whether to read targets from target.csv file.
-            Defaults to False.
+        root (Path): path to json data (for example data/train/defects/pymatgen)
 
     Returns:
-        U[D[str, Structure], T[D[str, Structure], L[D[str, str]]]]: 
-    dictionary of structures or tuple with dictionary of structures and targets band gap
-    
+        D[str, Structure]: dictionary of structures 
+
     """
-    root = Path(root) if isinstance(root, str) else root
-    folder_contains = tuple(i.name for i in root.iterdir())
-    assert root.exists(), f'No folder exists at {root}'
-    assert root.is_dir(), f'root variable must point at folder'
-    assert 'structures' in folder_contains, f'structure/ folder is not found in {folder_contains}'
+    json_path = Path(json_path) if isinstance(json_path, str) else json_path
+    assert json_path.exists(), f'No folder exists at {json_path}'
+    assert json_path.is_dir(), f'root variable must point at folder'
 
     structures = {}
-    for structure_path in tqdm((root / 'structures').glob('*.json')):
+    for structure_path in tqdm(json_path.glob('*.json')):
         with open(structure_path, 'r') as f:
             struct = Structure.from_dict(json.load(f))
             structures.update({structure_path.name.strip('.json'): struct})
-
-    if with_targets:
-        assert 'targets.csv' in (i.name for i in root.iterdir()), f'targets.csv is not found in {root}'
-        targets = read_csv(root / 'targets.csv')
-        return structures, targets
-
     return structures
 
 
