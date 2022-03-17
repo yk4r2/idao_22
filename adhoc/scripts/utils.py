@@ -1,7 +1,10 @@
 """Utils for reading and visualizing the structures."""
 import json
 from pathlib import Path, PosixPath
-from typing import Tuple as T, Dict as D, Union as U, Optional as O
+from typing import Dict as D
+from typing import Optional
+from typing import Tuple as T
+from typing import Union as U
 
 import nglview
 import pandas as pd
@@ -26,7 +29,7 @@ def read_json_structures(root: Path) -> pd.DataFrame:
         [
             {
                 "_id": path.name.strip(".json"),
-                "structure": Structure.from_dict(json.load(open(path, "r", encoding="utf-8"))),
+                "structure": Structure.from_dict(json.load(open(path, encoding="utf-8"))),
             }
             for path in tqdm(root.glob("*.json"))
         ]
@@ -92,13 +95,13 @@ def read_structures(json_path: Path) -> D[str, Structure]:
 
     structures = {}
     for structure_path in tqdm(json_path.glob("*.json")):
-        with open(structure_path, "r", encoding="utf-8") as file:
+        with open(structure_path, encoding="utf-8") as file:
             struct = Structure.from_dict(json.load(file))
             structures.update({structure_path.name.strip(".json"): struct})
     return structures
 
 
-def _abs_root_path(current_path: O[Path] = None) -> Path:
+def _abs_root_path(current_path: Optional[Path] = None) -> Path:
     """detects root path by iterating from current folder upwards"""
 
     current_path = current_path or Path(".")
@@ -150,8 +153,18 @@ def from_root_folder(path: U[str, Path], must_exist: bool = False) -> Path:
     return absolute_path
 
 
-class RootPath(PosixPath):  # pylint: disable=C0115
-    _flavour = PosixPath._flavour
+# mypy: ignore-errors
+class RootPath(PosixPath):
+    """
+    123
+    Args:
+        PosixPath (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    _flavour = None  # Type: ignore
 
     def __new__(cls, path: U[str, Path], must_exist: bool = False):  # pylint: disable=W0221
         return super().__new__(cls, *[from_root_folder(path, must_exist)])
