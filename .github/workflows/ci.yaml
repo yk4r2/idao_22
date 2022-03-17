@@ -36,7 +36,3 @@ jobs:
       run: pylint .
     - name: Run Mypy
       run: mypy .
-    - name: tests
-      run: |
-       pip install .[tests]
-       pytest
