@@ -131,9 +131,9 @@ def _str_to_path(path: U[str, Path]) -> Path:
 def from_root_folder(path: U[str, Path], must_exist: bool = False) -> Path:
     """Construct path from root folder
 
-    Example:
+    Examples:
         >> from_root_folder('models/ALIGNN')
-        ... /Users/tomatoparetogmail.com/Desktop/idao_22/models/ALIGNN
+           /Users/tomatoparetogmail.com/Desktop/idao_22/models/ALIGNN
     """
 
     path = _str_to_path(path)
@@ -162,7 +162,8 @@ class RootPath(PosixPath):
 
     Examples:
         >> path_to_data = RootPath('data')
-        >> print(path_to_data)             # RootPath('/idao_2022/data)
+        >> print(path_to_data)              # RootPath('/idao_2022/data)
+
     """
 
     _flavour = PosixPath._flavour
