@@ -7,10 +7,10 @@ import numpy as np
 from pymatgen.core import Lattice, Structure
 from tqdm import tqdm
 
-from adhoc.scripts.utils import structures_to_df
+from adhoc.scripts.utils import read_structures
 
 
-def diff_ideal(struct: Structure, universal_set: Structure) -> Structure:
+def _diff_ideal(struct: Structure, universal_set: Structure) -> Structure:
     """Get atoms complement to our Structure (Schottky-defects).
 
     Arguments:
@@ -40,7 +40,7 @@ def diff_ideal(struct: Structure, universal_set: Structure) -> Structure:
     return Structure.from_sites(defects)
 
 
-def construct_ideal() -> Structure:
+def _construct_ideal() -> Structure:
     """Create an ideal molecule for Schottky-defects detection.
 
     Returns:
@@ -90,23 +90,42 @@ def construct_ideal() -> Structure:
     return Structure(lat, elements, positions, coords_are_cartesian=False)  # type: ignore[arg-type]
 
 
-if __name__ == "__main__":
-    ideal_structure = construct_ideal()
-    ideal_set = set(ideal_structure)
-    df_public = structures_to_df()
-    structures = df_public["structure"].to_list()
-    ids = df_public["_id"].to_list()
+def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int = 8) -> None:
+    """Extracts defected atoms from structure and writes them to 
+    folder in pymatgen format
 
-    with mp.Pool(8) as p:
+    Arguments:
+        extract_from :: pathlib.Path
+            From where to get the whole structures
+
+        write_to :: pathlib.Path
+            Where to write defected atoms
+
+        n_workers :: int
+            Number of parallel processes to use
+    """
+
+    assert write_to.exists(), 'Destination path doesnt exist'
+    assert write_to.is_dir(), 'Destination path must be a folder'
+    assert extract_from.exists(), 'Extract from path must exist'
+    assert extract_from.is_dir(), 'Extract from path must be a folder'
+    assert len(extract_from.glob('*.json')) > 0, f'No json data found at {extract_from}'
+
+    ideal_structure = _construct_ideal()
+    ideal_set = set(ideal_structure)
+    structures_dict = read_structures(extract_from)
+
+    structures = structures_dict.values()
+    ids = structures_dict.keys()
+
+    with mp.Pool(n_workers) as p:
         result = list(
             tqdm(
-                p.imap(partial(diff_ideal, ideal_set=ideal_set), structures),
+                p.imap(partial(_diff_ideal, ideal_set=ideal_set), structures),
                 total=len(structures),
             )
         )
 
-    path = Path("defects_private/")
-
     for name, item in zip(ids, result):
-        with open((path / name).with_suffix(".json"), "w") as f:
+        with open((write_to / name).with_suffix(".json"), "w") as f:
             f.writelines(item.to_json())

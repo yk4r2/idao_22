@@ -1,7 +1,7 @@
 """Utils for reading and visualizing the structures."""
 import json
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple as T, Dict as D
 
 import nglview
 import pandas as pd
@@ -37,7 +37,7 @@ def read_json_structures(root: Path) -> pd.DataFrame:
 def structures_to_df(
     root_public_path: Path = Path("../data/dichalcogenides_public"),
     root_private_path: Path = Path("../data/dichalcogenides_private"),
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+) -> T[pd.DataFrame, pd.DataFrame]:
     """Wrap pymatgen-structures to pandas.DataFrame.
 
     Arguments:
@@ -71,3 +71,28 @@ def show(struct: Structure) -> None:
           Pymatgen-like structure. [More info](https://t.ly/QTem)
     """
     nglview.show_pymatgen(struct)
+
+
+def read_structures(json_path: Path) -> D[str, Structure]:
+    """
+    takes path to the root of data and reads structures from .json file
+    to dict, where keys are ids and values are pymatgen.core.Structure objects
+    
+    Arguments:
+        root :: pathlib.Path,
+            path to json data (for example data/train/defects/pymatgen)
+            
+    Returns:
+        D[str, Structure]:
+            dictionary of structures 
+    """
+    json_path = Path(json_path) if isinstance(json_path, str) else json_path
+    assert json_path.exists(), f'No folder exists at {json_path}'
+    assert json_path.is_dir(), f'root variable must point at folder'
+
+    structures = {}
+    for structure_path in tqdm(json_path.glob('*.json')):
+        with open(structure_path, 'r') as f:
+            struct = Structure.from_dict(json.load(f))
+            structures.update({structure_path.name.strip('.json'): struct})
+    return structures
