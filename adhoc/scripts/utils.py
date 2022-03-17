@@ -1,5 +1,6 @@
 """Utils for reading and visualizing the structures."""
 import json
+import warnings
 from pathlib import Path, PosixPath
 from typing import Dict as D
 from typing import Optional
@@ -8,8 +9,10 @@ from typing import Union as U
 
 import nglview
 import pandas as pd
-from pymatgen.core import Structure
 from tqdm import tqdm
+
+warnings.filterwarnings("ignore")
+from pymatgen.core import Structure  # noqa: E402 pylint: disable=C0413
 
 tqdm.pandas()
 

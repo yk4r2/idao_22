@@ -1,25 +1,25 @@
 """Library to calculate Schottky-defects from pymatgen-JSON files."""
+import argparse
 import multiprocessing as mp
+import warnings
 from functools import partial
 from pathlib import Path
 
 import numpy as np
-from pymatgen.core import Lattice, Structure
 from tqdm import tqdm
+from utils import read_structures
 
-from adhoc.scripts.utils import read_structures
+warnings.filterwarnings("ignore")
+from pymatgen.core import Lattice, Structure  # noqa: E402 pylint: disable=C0413
 
 
-# pylint: disable=C0321
 def _diff_ideal(struct: Structure, universal_set: Structure) -> Structure:
     """Get atoms complement to our Structure (Schottky-defects).
-
     Arguments:
         struct :: pymatgen.core.Structure,
           Structure to get compliment for.
         universal_set :: pymatgen.core.Structure,
           Structure of a universal set, used for complement search.
-
     Returns:
         pymatgen.core.Structure,
           Structure created by universal_set - struct.
@@ -43,7 +43,6 @@ def _diff_ideal(struct: Structure, universal_set: Structure) -> Structure:
 
 def _construct_ideal() -> Structure:
     """Create an ideal molecule for Schottky-defects detection.
-
     Returns:
         pymatgen.core.Structure,
           Structure with the universal set, used for complement search.
@@ -91,28 +90,26 @@ def _construct_ideal() -> Structure:
     return Structure(lat, elements, positions, coords_are_cartesian=False)  # type: ignore[arg-type]
 
 
-def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int = 8) -> None:
+def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int = 2) -> None:
     """Extracts defected atoms from structure and writes them to
     folder in pymatgen format
-
     Arguments:
         extract_from :: pathlib.Path
             From where to get the whole structures
-
         write_to :: pathlib.Path
             Where to write defected atoms
-
         n_workers :: int
             Number of parallel processes to use
     """
+    if not write_to.exists():
+        write_to.mkdir()
 
-    assert write_to.exists(), "Destination path doesnt exist"
     assert write_to.is_dir(), "Destination path must be a folder"
     assert extract_from.exists(), "Extract from path must exist"
     assert extract_from.is_dir(), "Extract from path must be a folder"
 
     ideal_structure = _construct_ideal()
-    ideal_set = set(ideal_structure)
+    universal_set = set(ideal_structure)
     structures_dict = read_structures(extract_from)
 
     structures = structures_dict.values()
@@ -121,7 +118,7 @@ def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int
     with mp.Pool(n_workers) as pool:
         result = list(
             tqdm(
-                pool.imap(partial(_diff_ideal, ideal_set=ideal_set), structures),
+                pool.imap(partial(_diff_ideal, universal_set=universal_set), structures),
                 total=len(structures),
             )
         )
@@ -129,3 +126,44 @@ def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int
     for name, item in zip(ids, result):
         with open((write_to / name).with_suffix(".json"), "w", encoding="utf-8") as file:
             file.writelines(item.to_json())
+
+
+if __name__ == "__main__":
+    # pylint: disable=W0622
+    __spec__ = "ModuleSpec(name='builtins', loader=<class '_frozen_importlib.BuiltinImporter'>)"
+    parser = argparse.ArgumentParser(description="Extracts defects from structure")
+
+    parser.add_argument(
+        "--from",
+        dest="extract_from",
+        action="store",
+        type=Path,
+        default=None,
+        required=True,
+        help="path with pymatgen .json representation of structures",
+    )
+
+    parser.add_argument(
+        "--to",
+        dest="extract_to",
+        action="store",
+        type=Path,
+        default=None,
+        required=True,
+        help="path, where to save extracted defects in the " "form of pymatgen json files",
+    )
+
+    parser.add_argument(
+        "--jobs",
+        dest="jobs",
+        action="store",
+        type=int,
+        default=1,
+        help="path, where to save extracted defects in the " "form of pymatgen json files",
+    )
+
+    args = parser.parse_args()
+    assert args.extract_from.exists(), f"path doesnt exist: {args.extract_from}"
+    assert args.extract_to.exists(), f"path doesnt exist: {args.extract_to}"
+
+    extract_and_write_defects(args.extract_from, args.extract_to, args.jobs)
