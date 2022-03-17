@@ -26,7 +26,7 @@ def read_json_structures(root: Path) -> pd.DataFrame:
         [
             {
                 "_id": path.name.strip(".json"),
-                "structure": Structure.from_dict(json.load(open(path))),
+                "structure": Structure.from_dict(json.load(open(path, "r", encoding="utf-8"))),
             }
             for path in tqdm(root.glob("*.json"))
         ]
@@ -88,11 +88,11 @@ def read_structures(json_path: Path) -> D[str, Structure]:
     """
     json_path = Path(json_path) if isinstance(json_path, str) else json_path
     assert json_path.exists(), f"No folder exists at {json_path}"
-    assert json_path.is_dir(), f"root variable must point at folder"
+    assert json_path.is_dir(), "root variable must point at folder"
 
     structures = {}
     for structure_path in tqdm(json_path.glob("*.json")):
-        with open(structure_path, "r") as f:
-            struct = Structure.from_dict(json.load(f))
+        with open(structure_path, "r", encoding="utf-8") as file:
+            struct = Structure.from_dict(json.load(file))
             structures.update({structure_path.name.strip(".json"): struct})
     return structures

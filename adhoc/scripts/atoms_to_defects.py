@@ -10,6 +10,7 @@ from tqdm import tqdm
 from adhoc.scripts.utils import read_structures
 
 
+# pylint: disable=C0321
 def _diff_ideal(struct: Structure, universal_set: Structure) -> Structure:
     """Get atoms complement to our Structure (Schottky-defects).
 
@@ -109,7 +110,6 @@ def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int
     assert write_to.is_dir(), "Destination path must be a folder"
     assert extract_from.exists(), "Extract from path must exist"
     assert extract_from.is_dir(), "Extract from path must be a folder"
-    assert len(extract_from.glob("*.json")) > 0, f"No json data found at {extract_from}"
 
     ideal_structure = _construct_ideal()
     ideal_set = set(ideal_structure)
@@ -118,14 +118,14 @@ def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int
     structures = structures_dict.values()
     ids = structures_dict.keys()
 
-    with mp.Pool(n_workers) as p:
+    with mp.Pool(n_workers) as pool:
         result = list(
             tqdm(
-                p.imap(partial(_diff_ideal, ideal_set=ideal_set), structures),
+                pool.imap(partial(_diff_ideal, ideal_set=ideal_set), structures),
                 total=len(structures),
             )
         )
 
     for name, item in zip(ids, result):
-        with open((write_to / name).with_suffix(".json"), "w") as f:
-            f.writelines(item.to_json())
+        with open((write_to / name).with_suffix(".json"), "w", encoding="utf-8") as file:
+            file.writelines(item.to_json())
