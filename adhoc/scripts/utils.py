@@ -120,10 +120,7 @@ def _abs_root_path(current_path: Optional[Path] = None) -> Path:
 
 
 def _str_to_path(path: U[str, Path]) -> Path:
-
-    if isinstance(path, str):
-        path = Path(path)
-
+    path = Path(path) if isinstance(path, str) else path
     assert isinstance(path, Path)
     return path
 
