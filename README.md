@@ -26,25 +26,6 @@ Then we use `MEGNet` to predict band gap on structures of defects. Next, we use 
 
 ![pipeline](images/solution.png)
 
-## Project Structure
-
-```
-idao_22
-│   generate_submission.py
-│   config.yaml
-│
-└───data
-│   	...
-│
-└───notebooks
-│   	features_selection_boosting.ipynb
-│   	...
-│
-└───weights
-    	boosting.cbm
-    	val_mae_00750_0.010320.hdf5
-```
-
 ## Models used
 
 - `MEGNet` (to generate features used in boosting)
