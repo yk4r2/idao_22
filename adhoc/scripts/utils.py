@@ -77,22 +77,22 @@ def read_structures(json_path: Path) -> D[str, Structure]:
     """
     takes path to the root of data and reads structures from .json file
     to dict, where keys are ids and values are pymatgen.core.Structure objects
-    
+
     Arguments:
         root :: pathlib.Path,
             path to json data (for example data/train/defects/pymatgen)
-            
+
     Returns:
         D[str, Structure]:
-            dictionary of structures 
+            dictionary of structures
     """
     json_path = Path(json_path) if isinstance(json_path, str) else json_path
-    assert json_path.exists(), f'No folder exists at {json_path}'
-    assert json_path.is_dir(), f'root variable must point at folder'
+    assert json_path.exists(), f"No folder exists at {json_path}"
+    assert json_path.is_dir(), f"root variable must point at folder"
 
     structures = {}
-    for structure_path in tqdm(json_path.glob('*.json')):
-        with open(structure_path, 'r') as f:
+    for structure_path in tqdm(json_path.glob("*.json")):
+        with open(structure_path, "r") as f:
             struct = Structure.from_dict(json.load(f))
-            structures.update({structure_path.name.strip('.json'): struct})
+            structures.update({structure_path.name.strip(".json"): struct})
     return structures

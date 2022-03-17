@@ -91,7 +91,7 @@ def _construct_ideal() -> Structure:
 
 
 def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int = 8) -> None:
-    """Extracts defected atoms from structure and writes them to 
+    """Extracts defected atoms from structure and writes them to
     folder in pymatgen format
 
     Arguments:
@@ -105,11 +105,11 @@ def extract_and_write_defects(extract_from: Path, write_to: Path, n_workers: int
             Number of parallel processes to use
     """
 
-    assert write_to.exists(), 'Destination path doesnt exist'
-    assert write_to.is_dir(), 'Destination path must be a folder'
-    assert extract_from.exists(), 'Extract from path must exist'
-    assert extract_from.is_dir(), 'Extract from path must be a folder'
-    assert len(extract_from.glob('*.json')) > 0, f'No json data found at {extract_from}'
+    assert write_to.exists(), "Destination path doesnt exist"
+    assert write_to.is_dir(), "Destination path must be a folder"
+    assert extract_from.exists(), "Extract from path must exist"
+    assert extract_from.is_dir(), "Extract from path must be a folder"
+    assert len(extract_from.glob("*.json")) > 0, f"No json data found at {extract_from}"
 
     ideal_structure = _construct_ideal()
     ideal_set = set(ideal_structure)
