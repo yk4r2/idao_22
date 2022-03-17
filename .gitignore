@@ -10,8 +10,7 @@ settings.json
 *.so
 
 # danya
-models/mt-cgcnn/cifs/
-
+callback/
 
 
 # Distribution / packaging

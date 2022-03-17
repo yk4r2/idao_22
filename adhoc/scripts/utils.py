@@ -1,7 +1,7 @@
 """Utils for reading and visualizing the structures."""
 import json
-from pathlib import Path
-from typing import Tuple as T, Dict as D
+from pathlib import Path, PosixPath
+from typing import Tuple as T, Dict as D, Union as U, Optional as O
 
 import nglview
 import pandas as pd
@@ -96,3 +96,62 @@ def read_structures(json_path: Path) -> D[str, Structure]:
             struct = Structure.from_dict(json.load(file))
             structures.update({structure_path.name.strip(".json"): struct})
     return structures
+
+
+def _abs_root_path(current_path: O[Path] = None) -> Path:
+    """detects root path by iterating from current folder upwards"""
+
+    current_path = current_path or Path(".")
+    _str_to_path(current_path)
+
+    current_path = current_path.absolute()
+    max_depth = 10
+
+    while not (current_path / ".root").exists():
+        current_path = current_path.parent
+        max_depth -= 1
+
+        if max_depth < 0:
+            raise Exception("Could not found .root file in parents dirs. Reclone repository.")
+    return current_path
+
+
+def _str_to_path(path: U[str, Path]) -> Path:
+
+    if isinstance(path, str):
+        path = Path(path)
+
+    assert isinstance(path, Path)
+    return path
+
+
+def from_root_folder(path: U[str, Path], must_exist: bool = False) -> Path:
+    """Construct path from root folder
+
+    Example:
+        >> from_root_folder('models/ALIGNN')
+        ... /Users/tomatoparetogmail.com/Desktop/idao_22/models/ALIGNN
+    """
+
+    path = _str_to_path(path)
+
+    if path.is_absolute():
+        raise Exception("Only relatives paths must be provided")
+
+    root_path = _abs_root_path(path)
+    absolute_path = root_path / path
+
+    if not absolute_path.exists():
+        print(f"WARNING: {absolute_path} doesnt exists")
+
+    if must_exist and (not absolute_path.exists()):
+        raise Exception(f"Constructed path {absolute_path} doesnt exist")
+
+    return absolute_path
+
+
+class RootPath(PosixPath):  # pylint: disable=C0115
+    _flavour = PosixPath._flavour
+
+    def __new__(cls, path: U[str, Path], must_exist: bool = False):  # pylint: disable=W0221
+        return super().__new__(cls, *[from_root_folder(path, must_exist)])
