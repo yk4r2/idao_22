@@ -93,20 +93,34 @@ def construct_ideal() -> Structure:
 if __name__ == "__main__":
     ideal_structure = construct_ideal()
     ideal_set = set(ideal_structure)
-    df_public = structures_to_df()
-    structures = df_public["structure"].to_list()
-    ids = df_public["_id"].to_list()
+
+    df_public, df_private = structures_to_df()
+    structures_pub = df_public["structure"].to_list()
+    ids_pub = df_public["_id"].to_list()
+    structures_priv = df_private["structure"].to_list()
+    ids_priv = df_public["_id"].to_list()
 
     with mp.Pool(8) as p:
-        result = list(
+        result_pub = list(
             tqdm(
-                p.imap(partial(diff_ideal, ideal_set=ideal_set), structures),
-                total=len(structures),
+                p.imap(partial(diff_ideal, ideal_set=ideal_set), structures_pub),
+                total=len(structures_pub),
+            )
+        )
+        result_priv = list(
+            tqdm(
+                p.imap(partial(diff_ideal, ideal_set=ideal_set), structures_priv),
+                total=len(structures_priv),
             )
         )
 
-    path = Path("defects_private/")
+    path_pub = Path("../data/eval/defects/pymatgen/")
+    path_priv = Path("../data/train/defects/pymatgen/")
 
-    for name, item in zip(ids, result):
-        with open((path / name).with_suffix(".json"), "w") as f:
+    for name, item in zip(ids_pub, result_pub):
+        with open((path_pub / name).with_suffix(".json"), "w") as f:
+            f.writelines(item.to_json())
+
+    for name, item in zip(ids_priv, result_priv):
+        with open((path_priv / name).with_suffix(".json"), "w") as f:
             f.writelines(item.to_json())

@@ -155,8 +155,8 @@ def append_formula_stats(data: pd.DataFrame, stats: dict) -> pd.Series:
 
 def main() -> None:
     """Main loop for features extraction."""
-    root_public_path = Path("../data/dichalcogenides_public")
-    root_private_path = Path("../data/dichalcogenides_private")
+    root_public_path = Path("../data/train/no_defects/pymatgen")
+    root_private_path = Path("../data/eval/no_defects/pymatgen")
 
     df_public, df_private = structures_to_df(root_public_path, root_private_path)
 
