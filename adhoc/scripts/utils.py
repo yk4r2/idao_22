@@ -1,12 +1,16 @@
 """Utils for reading and visualizing the structures."""
 import json
-from pathlib import Path
-from typing import Tuple
+import warnings
+from pathlib import Path, PosixPath
+from typing import Optional, Tuple
+from typing import Union as U
 
 import nglview
 import pandas as pd
-from pymatgen.core import Structure
 from tqdm import tqdm
+
+warnings.filterwarnings("ignore")
+from pymatgen.core import Structure  # noqa: E402 pylint: disable=C0413
 
 tqdm.pandas()
 
@@ -69,3 +73,68 @@ def show(struct: Structure) -> None:
           Pymatgen-like structure. [More info](https://t.ly/QTem)
     """
     nglview.show_pymatgen(struct)
+
+
+def _abs_root_path(current_path: Optional[Path] = None) -> Path:
+    """detects root path by iterating from current folder upwards"""
+
+    current_path = current_path or Path(".")
+    _str_to_path(current_path)
+
+    current_path = current_path.absolute()
+    max_depth = 10
+
+    while not (current_path / ".root").exists():
+        current_path = current_path.parent
+        max_depth -= 1
+
+        if max_depth < 0:
+            raise Exception("Could not found .root file in parents dirs. Reclone repository.")
+    return current_path
+
+
+def _str_to_path(path: U[str, Path]) -> Path:
+    path = Path(path) if isinstance(path, str) else path
+    assert isinstance(path, Path)
+    return path
+
+
+def from_root_folder(path: U[str, Path], must_exist: bool = False) -> Path:
+    """Construct path from root folder
+    Examples:
+        >> from_root_folder('models/ALIGNN')
+           /Users/tomatoparetogmail.com/Desktop/idao_22/models/ALIGNN
+    """
+
+    path = _str_to_path(path)
+
+    if path.is_absolute():
+        raise Exception("Only relatives paths must be provided")
+
+    root_path = _abs_root_path(path)
+    absolute_path = root_path / path
+
+    if not absolute_path.exists():
+        print(f"WARNING: {absolute_path} doesnt exists")
+
+    if must_exist and (not absolute_path.exists()):
+        raise Exception(f"Constructed path {absolute_path} doesnt exist")
+
+    return absolute_path
+
+
+# mypy: ignore-errors
+class RootPath(PosixPath):
+    """
+    Allows to use paths, which are relative to root folder. Determines root path by
+    looking for `.root` file. If folder containse such file, then the folder is
+    considered to be root.
+    Examples:
+        >> path_to_data = RootPath('data')
+        >> print(path_to_data)              # RootPath('/idao_2022/data)
+    """
+
+    _flavour = PosixPath._flavour
+
+    def __new__(cls, path: U[str, Path], must_exist: bool = False):  # pylint: disable=W0221
+        return super().__new__(cls, *[from_root_folder(path, must_exist)])

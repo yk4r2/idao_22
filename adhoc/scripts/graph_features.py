@@ -4,7 +4,6 @@ Usage:
     $: poetry run graph_features.py
 """
 import multiprocessing as mp
-from pathlib import Path
 
 import networkx as nx
 import numpy as np
@@ -13,7 +12,7 @@ from networkx import algorithms as nxalg
 from pymatgen.analysis.graphs import StructureGraph
 from pymatgen.analysis.local_env import CrystalNN
 
-from adhoc.scripts.utils import structures_to_df
+from adhoc.scripts.utils import RootPath, structures_to_df
 
 
 def _extract_features(data: pd.DataFrame) -> pd.DataFrame:
@@ -155,8 +154,8 @@ def append_formula_stats(data: pd.DataFrame, stats: dict) -> pd.Series:
 
 def main() -> None:
     """Main loop for features extraction."""
-    root_public_path = Path("../data/train/no_defects/pymatgen")
-    root_private_path = Path("../data/eval/no_defects/pymatgen")
+    root_public_path = RootPath("data/train/no_defects/pymatgen")
+    root_private_path = RootPath("data/eval/no_defects/pymatgen")
 
     df_public, df_private = structures_to_df(root_public_path, root_private_path)
 
