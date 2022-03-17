@@ -25,7 +25,7 @@ We present networks, weights and stacking algorithms for our third place solutio
 - [Sungatullin Ruslan, sunruslan](https://github.com/sunruslan)
 
 ## 🔗 Citation
-It's empty here for now.
+Empty here, hope not for long.
 
 ## 👀 Overview
 ### ⏰ Abstract
@@ -73,6 +73,12 @@ data
 ### 🍀 Our data structure
 The training dataset is in the `data` directory, and contains `eval` (private) and `train` (public) directories. Inside them one can find `defects` and `no_defects` folders, original structures in different formats are stored at `no_defects` directory while `defects` directory contains complement to the original crystal lattice.\
 Inside the `defects` and `no_defects` directories one can find original data in pymatgen-format, jarvis-adapted structures, CFID-descripted structures (for more info check out [its source code](https://t.ly/yCyi)) and graph features (only for `no_defects`-directories, for more info check out `adhoc/scripts/graph_features.py:19`).
+
+You can use data in Kaggle datasets-format:
+- [Track 1 dataset](https://www.kaggle.com/datasets/yk4r22/idao-22)
+- [Track 2 dataset](https://www.kaggle.com/datasets/yk4r22/boosting-idao22)
+
+Data structure:
 ```bash
 data
 ├── eval
@@ -151,14 +157,30 @@ data
 ### 🪜 Steps
 ![Method scheme](images/IDAO-22-main.png)
 The original [ALIGNN](https://github.com/usnistgov/alignn) and [MEGNet](https://github.com/materialsvirtuallab/megnet) frameworks were fine-tuned and used in a following way:
-- We described the data using CFID descriptor from the [JARVIS-ML package](https://github.com/usnistgov/jarvis), source code is [here](https://t.ly/yCyi).
+- We described the data using CFID descriptor froM the [JARVIS-ML package](https://github.com/usnistgov/jarvis), source code is [here](https://t.ly/yCyi).
 - Secondly we used complements to our structures for predictions (Schottky defects). We computed complement structures (code in `adhoc/scripts/atoms_to_defects.py`) for future steps.
 - Next, some graph features from [networkx.algorithms](https://networkx.org/documentation/stable/reference/algorithms/index.html) package were computed. See the `adhoc/scripts/graph_features.py` and functions documentation for more info.
+
+**All these steps are performed in `adhoc/datasets_converter.ipynb`**
 - Afterwards we tuned twice 4 pre-trained ALIGNN Nets on pymatgen-adapted data using Google Colab, starting models can be found in the `models/ALIGNN/pretrained` directory. Resulting models are in the `models/ALIGNN/fine-fine-tuned` directory and ALIGNN was [forked](https://github.com/yk4r2/alignn) for better usability.
 - Then we tuned 4 pre-trained ALIGNN models for complementary structures data. Resulting models are in `models/ALIGNN/defects`.
+
+**These steps are performed in `adhoc/ALIGNN_train_inference.ipynb`, here's [Colab notebook](https://colab.research.google.com/drive/1NZhOvrt8FKLhnZgiQzNDuF2NApU2E0al?usp=sharing).**
 - Then MEGNet was trained on complement structures only and CFID-descriptors for complement structures were computed too.
+
+**This step is in `adhoc/MEGNet_train_inference.ipynb`**
 - 8 ALIGNN Nets (for structures and complements) predictions were calculated, mixed with MegNet predictions and given to [CatBoostRegressor](https://catboost.ai/en/docs/concepts/python-reference_catboostregressor) along with graph features and descriptors...
+
+**This step can be found in `adhoc/CatBoost_train_inference.ipynb`, here's [Kaggle notebook](https://www.kaggle.com/yk4r22/idao-tries).**
+
 ...PROFIT!
+
+### 👀 Inference
+In case you want to test our model, you can use two notebooks:
+- `adhoc/datasets_converter.ipynb`
+- `adhoc/All_inferences.ipynb`
+
+**❗️ The last one is not tested properly**
 
 ### 🚗 Specs
 - Google Colab Pro+ with Tesla V100 for ALIGNN train and inference,

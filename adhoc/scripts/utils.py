@@ -51,10 +51,8 @@ def structures_to_df(
           df_public contains structure, formula and targets columns.
           df_private contains structure and formula only.
     """
-    df_private = read_json_structures(root_private_path / "structures")
-    df_public = read_json_structures(root_public_path / "structures").merge(
-        pd.read_csv(root_public_path / "targets.csv")
-    )
+    df_private = read_json_structures(root_private_path)
+    df_public = read_json_structures(root_public_path).merge(pd.read_csv(root_public_path / "targets.csv"))
 
     # may be used in the future
     df_public["formula"] = df_public["structure"].apply(lambda x: x.formula)
