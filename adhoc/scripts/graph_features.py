@@ -12,7 +12,7 @@ from networkx import algorithms as nxalg
 from pymatgen.analysis.graphs import StructureGraph
 from pymatgen.analysis.local_env import CrystalNN
 
-from adhoc.scripts.utils import structures_to_df, RootPath
+from adhoc.scripts.utils import RootPath, structures_to_df
 
 
 def _extract_features(data: pd.DataFrame) -> pd.DataFrame:
@@ -154,8 +154,8 @@ def append_formula_stats(data: pd.DataFrame, stats: dict) -> pd.Series:
 
 def main() -> None:
     """Main loop for features extraction."""
-    root_public_path = RootPath('data/dichalcogenides_public', must_exist=True)
-    root_private_path = RootPath('data/dichalcogenides_private', must_exist=True)
+    root_public_path = RootPath("data/dichalcogenides_public", must_exist=True)
+    root_private_path = RootPath("data/dichalcogenides_private", must_exist=True)
 
     df_public, df_private = structures_to_df(root_public_path, root_private_path)
 

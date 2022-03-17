@@ -164,7 +164,7 @@ class RootPath(PosixPath):
         _type_: _description_
     """
 
-    _flavour = None  # Type: ignore
+    _flavour = None
 
     def __new__(cls, path: U[str, Path], must_exist: bool = False):  # pylint: disable=W0221
         return super().__new__(cls, *[from_root_folder(path, must_exist)])
