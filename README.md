@@ -23,6 +23,7 @@ Together with the code, we upload the following data to the second track:
 - MEGNet's weights
 
 Then we use `MEGNet` to predict band gap on structures of defects. Next, we use its prediction together with abovementioned features to obtain final prediction. We do not use prediction of heavy models (such as `ALIGNN`) as features on this track. Overall pipeline, described in [generate_submission.py](generate_submission.py), can be seen generally on the image below:
+
 ![pipeline](images/solution.png)
 
 ## Project Structure
