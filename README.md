@@ -59,7 +59,7 @@ List of all features, used in the final prediction can be viewed at [notebooks/c
 Here are links for features extraction and models training that we performed in order to use in the solution
 
 - [Graph features extraction](https://github.com/yk4r2/idao_22/blob/master/adhoc/scripts/graph_features.py)
-- [Defects extraction](https://github.com/yk4r2/idao_22/blob/master/adhoc/scripts/atoms_to_defects.py)
+- [Defects extraction](notebooks/atoms_to_defects.ipynb)
 - [CFID descriptors of defects](https://github.com/yk4r2/idao_22/blob/master/adhoc/datasets_converter.ipynb)
 - [Boosting training](https://github.com/yk4r2/idao_22/blob/final/track2/notebooks/features_selection_boosting.ipynb)
 - [MEGNet training](https://github.com/yk4r2/idao_22/blob/master/adhoc/megnet_on_defects.ipynb)

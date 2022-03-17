@@ -3,8 +3,12 @@ import json
 import yaml
 from tqdm import tqdm
 from pathlib import Path, PosixPath
-from pymatgen.core import Structure
 from typing import Dict as D, List as L, Union as U, Optional
+
+import warnings
+warnings.filterwarnings("ignore")
+
+from pymatgen.core import Structure
 
 
 def read_config(path: Path) -> D[str, str]:
@@ -40,6 +44,7 @@ def read_structures(json_path: Path) -> D[str, Structure]:
     assert json_path.is_dir(), 'root variable must point at folder'
 
     structures = {}
+
     for structure_path in tqdm(json_path.glob('*.json')):
         with open(structure_path, 'r') as f:
             struct = Structure.from_dict(json.load(f))
