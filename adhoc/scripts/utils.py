@@ -156,15 +156,16 @@ def from_root_folder(path: U[str, Path], must_exist: bool = False) -> Path:
 # mypy: ignore-errors
 class RootPath(PosixPath):
     """
-    123
-    Args:
-        PosixPath (_type_): _description_
+    Allows to use paths, which are relative to root folder. Determines root path by
+    looking for `.root` file. If folder containse such file, then the folder is
+    considered to be root.
 
-    Returns:
-        _type_: _description_
+    Examples:
+        >> path_to_data = RootPath('data')
+        >> print(path_to_data)             # RootPath('/idao_2022/data)
     """
 
-    _flavour = None
+    _flavour = PosixPath._flavour
 
     def __new__(cls, path: U[str, Path], must_exist: bool = False):  # pylint: disable=W0221
         return super().__new__(cls, *[from_root_folder(path, must_exist)])
